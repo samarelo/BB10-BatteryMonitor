@@ -1,0 +1,120 @@
+<div data-bb-type="screen" data-bb-effect="slide-left">
+	<div data-bb-type="pill-buttons">
+		<div data-bb-type="pill-button" data-bb-selected="true" onclick="saBatteryMon.showTab('main');">
+			Main
+		</div>
+		<div data-bb-type="pill-button" onclick="saBatteryMon.showTab('stats');">
+			Stats
+		</div>
+		<!--<div data-bb-type="pill-button" onclick="saBatteryMon.showTab('logs');">
+		Logs
+		</div>-->
+		<div data-bb-type="pill-button" onclick="saBatteryMon.showTab('about');">
+			About
+		</div>
+	</div>
+	<div id="main" data-bb-type="round-panel">
+		<div data-bb-type="panel-header">
+			Main: Current Session
+		</div>
+		<div id="currentState" style="font-size:75%">
+			Plugged in:
+			<br />
+			Battery Level:
+			<br />
+			Avg Drain Rate:
+			<br />
+			Avg Charge Rate:
+		</div>
+		<div id="startButton" data-bb-type="button" onclick="saBatteryMon.start_monitor('currentState','logsOutput');">
+			Start
+		</div>
+		<div id="stopButton" data-bb-type="button" onclick="saBatteryMon.stop_monitor();" style="display:none">
+			Stop
+		</div>
+	</div>
+
+	<div id="stats" data-bb-type="round-panel" style="display:none; font-size:75%">
+		<div data-bb-type="panel-header">
+			Historical Stats
+		</div>
+		<div id="statsOutput">
+			Total of Sessions:<span id="statsSessionNum">-</span>
+			<br />
+			Avg Battery Level:<span id="statsAvgLevel">-</span>
+			<br />
+			Total Time Charging:<span id="statsTotalCharging">-</span>
+			<br />
+			Total Time Draining:<span id="statsTotalDraining">-</span>
+			<br />
+			Avg Charge Rate:<span id="statsAvgCharge">-</span>
+			<br />
+			Avg Drain Rate:<span id="statsAvgDrain">-</span>
+			<p></p>
+		</div>
+		<div id="filterStats">
+			<span style="text-decoration:underline;">Filter Stats By:</span>
+			<div id="filterDay" style="display:none;">
+				Day
+				<select data-bb-style="stretch" id="selectDay" onchange="saBatteryMon.filterByDay(this.value);">
+					<option value="ALL" selected="true">ALL</option>
+				</select>
+			</div>
+			<div id="filterMonth" style="display:none;">
+				Month
+				<select data-bb-style="stretch" id="selectMonth" onchange="saBatteryMon.filterByMonth(this.value);">
+					<option value="ALL" selected="true">ALL</option>
+				</select>
+			</div>
+			<div>
+				Year
+				<select data-bb-style="stretch" id="selectYear" onchange="saBatteryMon.filterByYear(this.value);">
+					<option value="ALL" selected="true">ALL</option>
+				</select>
+			</div>
+		</div>
+	</div>
+
+	<div id="logs" data-bb-type="round-panel" style="display:none">
+		<div data-bb-type="panel-header">
+			Logs
+		</div>
+		<div data-bb-type="button" onclick="alert('clear logs');">
+			Clear Logs
+		</div>
+		<div id="logsOutput" style="font-size:25%"></div>
+	</div>
+
+	<div id="about" data-bb-type="round-panel" style="display:none">
+		<div data-bb-type="panel-header">
+			About
+		</div>
+		<div  style="font-size:75%">
+			Battery Monitor
+			<br />
+			Used to monitor drain and charge rate of battery
+			<br />
+			Author: Shaun Amarelo
+			<br />
+			URL: ShaunsApps.com
+			<p></p>
+			Privacy:
+			<br />
+			No confidential information is obtained with the use of this application. In this version, the following information is collected and stored locally on the device:
+			<ul>
+				<li>
+					PIN
+				</li>
+				<li>
+					OS version
+				</li>
+				<li>
+					Date & Time
+				</li>
+				<li>
+					Charging and Draining Rates
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

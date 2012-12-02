@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC>
+<html>
+	<head>
+		<meta name="x-blackberry-defaultHoverEffect" content="false" />
+		<link rel="stylesheet" type="text/css" href="bbui/bbui-0.9.4.css"</link>
+		<script type="text/javascript" src="bbui/bbui-0.9.4.js"></script>
+		<script type="text/javascript" src='local:///chrome/webworks.js'></script>
+		<script id="batteryJS" type="text/javascript" src="js/battery.js"></script>
+		<script type="text/javascript">
+			var saBatteryMon = batteryMonitor();
+			bb.init({
+				actionBarDark : true,
+				controlsDark : true,
+				listsDark : false,
+				bb10ForPlayBook : false,
+				onscreenready : function(element, id) {
+					console.log("screenready");
+					///
+				},
+				ondomready : function(element, id) {
+					console.log("domready");
+
+					saBatteryMon.init({
+						curState : 'currentState',
+						logger : 'logsOutput',
+						startButton : 'startButton',
+						stopButton : 'stopButton',
+						tabs : ['main', 'stats', 'about'],
+						selectYear : 'selectYear',
+						selectMonth : 'selectMonth',
+						selectDay : 'selectDay',
+						filterMonth : 'filterMonth',
+						filterDay : 'filterDay',
+						totalDrain : 'statsTotalDraining',
+						totalCharge : 'statsTotalCharging',
+						avgDrain : 'statsAvgDrain',
+						avgCharge : 'statsAvgCharge',
+						sessionNum : 'statsSessionNum',
+						avgLevel : 'statsAvgLevel'
+					});
+				},
+			});
+		</script>
+	</head>
+	<body onload="bb.pushScreen('battery.html', 'battery');"></body>
+</html>
