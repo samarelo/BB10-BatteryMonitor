@@ -199,7 +199,7 @@ var batteryMonitor = function() {
 		db_query(statement, [], updateAvgDrainStats, db_onError)
 		statement = 'SELECT SUM(levelchgtime) AS sum FROM ' + TB_NAME + " " + filter + " AND islevelchg=1 AND ischarging=1";
 		db_query(statement, [], updateTotalChargeTimeStats, db_onError);
-		statement = 'SELECT SUM(levelchgtime) AS sum FROM ' + TB_NAME + " " + filter + " AND islevelchg=1 AND ischarging=1";
+		statement = 'SELECT SUM(levelchgtime) AS sum FROM ' + TB_NAME + " " + filter + " AND islevelchg=1 AND ischarging=0";
 		db_query(statement, [], updateTotalDrainTimeStats, db_onError);
 	};
 
