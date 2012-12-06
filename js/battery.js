@@ -122,7 +122,7 @@ var batteryMonitor = function() {
 		} catch (err) {
 			alert("error getting TimeStamp -" + err);
 		}
-	};
+	}
 
 	// confirms value is a number
 	function isNumber(value) {
@@ -135,7 +135,7 @@ var batteryMonitor = function() {
 		for ( i = 0; i < TABS_ARRAY.length; i++) {
 			document.getElementById(TABS_ARRAY[i]).style.display = 'none';
 		}
-	};
+	}
 
 	var _filterWyear = "";
 	var _filterWmonth = "";
@@ -149,17 +149,17 @@ var batteryMonitor = function() {
 		DB_OBJECT = openDatabase(DB_NAME, DB_VERSION, DB_DISPLAYNAME, DB_ESTSIZE, function() {
 			console.log("opened database successfully!");
 		});
-	};
+	}
 	// generic error callback
 	var db_onError = function(tx, e) {
 		var msg = "Database Error: " + e.message;
 		alert(msg);
 		console.log(msg);
-	};
+	}
 	// generic success callback
 	var db_onSuccess = function(tx, rs) {
 		//alert("Successful");
-	};
+	}
 	// can be used for all database queries
 	var db_query = function(statement, items, onSuccess, onError) {
 		var db = DB_OBJECT;
@@ -167,7 +167,7 @@ var batteryMonitor = function() {
 		db.transaction(function(tx) {
 			tx.executeSql(statement, items, onSuccess, onError);
 		});
-	};
+	}
 	// DATABASE HELPERS
 	/* database initialization */
 	function db_init() {
@@ -187,7 +187,7 @@ var batteryMonitor = function() {
 			updateHistStats(DEFAULTFILTER);
 			db_query(statement, [], updateYearFilter, db_onError);
 		}
-	};
+	}
 
 	function db_insertDemoData() {
 		// delete everything from table
@@ -254,7 +254,7 @@ var batteryMonitor = function() {
 		db_query(statement, [], updateTotalChargeTimeStats, db_onError);
 		statement = 'SELECT SUM(levelchgtime) AS sum FROM ' + TB_NAME + " " + filter + " AND islevelchg=1 AND ischarging=0";
 		db_query(statement, [], updateTotalDrainTimeStats, db_onError);
-	};
+	}
 
 	// DATABASE RESULTS FUNCTIONS //
 	function dbDisplayAll(tx, rs) {
@@ -263,29 +263,29 @@ var batteryMonitor = function() {
 			var output = renderRow(rs.rows.item(i));
 			console.log(output);
 		}
-	};
+	}
 
 	/* returns data separated by | */
 	function renderRow(row) {
 		return row.pin + " | " + row.os + " | " + row.session + " | " + row.level + " | " + row.ischarging + " | " + row.islevelchg + " | " + row.levelchgtime + " | " + row.year + " | " + row.month + " | " + row.day + " | " + row.hour + ":" + row.minute + ":" + row.second;
-	};
+	}
 
 	function updateYearFilter(tx, rs) {
 		var node = document.getElementById(SELECT_YEAR_ELEMENT);
 		updateSelectOptions(node, rs);
-	};
+	}
 
 	function updateMonthFilter(tx, rs) {
 		document.getElementById(FILTER_MONTH_ELEMENT).style.display = "block";
 		var node = document.getElementById(SELECT_MONTH_ELEMENT);
 		updateSelectOptions(node, rs);
-	};
+	}
 
 	function updateDayFilter(tx, rs) {
 		document.getElementById(FILTER_DAY_ELEMENT).style.display = "block";
 		var node = document.getElementById(SELECT_DAY_ELEMENT);
 		updateSelectOptions(node, rs);
-	};
+	}
 
 	function updateSelectOptions(select, rs) {
 		// first remove all child elements
@@ -305,7 +305,7 @@ var batteryMonitor = function() {
 			select.appendChild(opt);
 		}
 		select.refresh();
-	};
+	}
 
 	function updateTotalDrainTimeStats(tx, rs) {
 		var rate = 0;
@@ -315,7 +315,7 @@ var batteryMonitor = function() {
 			rate = rate.toFixed(2)
 		}
 		document.getElementById(TOTAL_DRAINING_ELEMENT).innerHTML = rate + ' seconds';
-	};
+	}
 
 	function updateTotalChargeTimeStats(tx, rs) {
 		var rate = 0;
@@ -324,7 +324,7 @@ var batteryMonitor = function() {
 			rate = rate.toFixed(2);
 		}
 		document.getElementById(TOTAL_CHARGING_ELEMENT).innerHTML = rate + ' seconds';
-	};
+	}
 
 	function updateAvgDrainStats(tx, rs) {
 		var rate = 0;
@@ -335,7 +335,7 @@ var batteryMonitor = function() {
 			per = "%/hour";
 		}
 		document.getElementById(AVG_DRAIN_ELEMENT).innerHTML = rate + per;
-	};
+	}
 
 	function updateAvgChargeStats(tx, rs) {
 		var rate = 0;
@@ -346,7 +346,7 @@ var batteryMonitor = function() {
 			per = "%/hour";
 		}
 		document.getElementById(AVG_CHARGE_ELEMENT).innerHTML = rate + per;
-	};
+	}
 
 	function updateNumSessionStats(tx, rs) {
 		var nSessions = 0;
@@ -354,18 +354,18 @@ var batteryMonitor = function() {
 			var nSessions = rs.rows.item(0).result;
 		}
 		document.getElementById(SESSION_NUM_ELEMENT).innerHTML = nSessions;
-	};
+	}
 
 	/* Database callback functions */
 	var _result = null;
 	function numOfResults(tx, rs) {
 		console.log("numOfResults entered with " + rs.rows.length + " results");
 		_result = rs.rows.length
-	};
+	}
 
 	function returnResult(tx, rs) {
 		_result = rs.rows.item(0).result;
-	};
+	}
 
 	/* used to determine TrackingSession number to use */
 	function determineSession(tx, rs) {
@@ -376,7 +376,7 @@ var batteryMonitor = function() {
 			TRACKSESSION = maxsession + 1;
 		}
 		console.log("TrackingSession = " + TRACKSESSION);
-	};
+	}
 
 	/* used to determine max session from historical data */
 	function maxsession(tx, rs) {
@@ -385,7 +385,7 @@ var batteryMonitor = function() {
 		} else {
 			return rs.rows.item(0).max;
 		}
-	};
+	}
 
 	// Battery tracking functions //
 	//BatteryMonitor_init
@@ -408,7 +408,7 @@ var batteryMonitor = function() {
 		} catch(err) {
 			alert("failed to start event listener: " + err);
 		}
-	};
+	}
 
 	function onBatteryStatusChg(info) {
 		console.log("+onBatteryStatusChg called");
@@ -522,7 +522,7 @@ var batteryMonitor = function() {
 		} catch (err) {
 			alert("onBatteryChg::" + err);
 		}
-	};
+	}
 
 	// objects available to outside world
 	return {
