@@ -93,24 +93,30 @@ var batteryMonitor = function() {
 	function getTimeStamp(date) {
 		try {
 			var timestamp = date.getFullYear() + "-";
-			if ((date.getMonth() + 1) < 10)
+			if ((date.getMonth() + 1) < 10) {
 				timestamp += 0;
+			}
 			timestamp += date.getMonth() + 1 + "-";
 			//need +1 as Months =[0,11]
-			if (date.getDate() < 10)
+			if (date.getDate() < 10) {
 				timestamp += 0;
+			}
 			timestamp += date.getDate() + " ";
-			if (date.getHours() < 10)
+			if (date.getHours() < 10) {
 				timestamp += 0;
+			}
 			timestamp += date.getHours() + ":";
-			if (date.getMinutes() < 10)
+			if (date.getMinutes() < 10) {
 				timestamp += 0;
+			}
 			timestamp += date.getMinutes() + ":";
-			if (date.getSeconds() < 10)
+			if (date.getSeconds() < 10) {
 				timestamp += 0;
+			}
 			timestamp += date.getSeconds() + ":";
-			if (date.getMilliseconds() < 100)
+			if (date.getMilliseconds() < 100) {
 				timestamp += 0;
+			}
 			timestamp += date.getMilliseconds();
 			return timestamp;
 		} catch (err) {
