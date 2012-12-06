@@ -9,7 +9,7 @@
 // });
 
 var batteryMonitor = function() {
-	'use strict';
+	//'use strict';
 	// UNIVERSAL variables //
 	// used to determine if module is being call for test suites
 	var ISTESTING = true,
