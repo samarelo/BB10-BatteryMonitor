@@ -165,7 +165,150 @@ var batteryMonitor = function() {
 			tx.executeSql(statement, items, onSuccess, onError);
 		});
 	},
+
+	// DATABASE RESULTS FUNCTIONS //
+	/* returns data separated by | */
+	renderRow = function(row) {
+		return row.pin + " | " + row.os + " | " + row.session + " | " + row.level + " | " + row.ischarging + " | " + row.islevelchg + " | " + row.levelchgtime + " | " + row.year + " | " + row.month + " | " + row.day + " | " + row.hour + ":" + row.minute + ":" + row.second;
+	},
+	//
+	dbDisplayAll = function(tx, rs) {
+		console.log("+dbDisplayAll - called with " + rs.rows.length + " rows");
+		var i = null, output = null;
+		for ( i = 0; i < rs.rows.length; i++) {
+			output = renderRow(rs.rows.item(i));
+			console.log(output);
+		}
+	},
+	//
+	updateSelectOptions = function(select, rs) {
+		// first remove all child elements
+		while (select.hasChildNodes()) {
+			select.removeChild(select.lastChild);
+		}
+		//now repopulate it
+		var opt = document.createElement("option"), i = null;
+		opt.setAttribute("value", "ALL");
+		opt.setAttribute("selected", "true");
+		opt.innerHTML = "ALL";
+		select.appendChild(opt);
+		for ( i = 0; i < rs.rows.length; i++) {
+			opt = document.createElement("option");
+			opt.setAttribute('value', rs.rows.item(i).result);
+			opt.innerHTML = rs.rows.item(i).result;
+			select.appendChild(opt);
+		}
+		select.refresh();
+	},
+	//
+	updateYearFilter = function(tx, rs) {
+		var node = document.getElementById(SELECT_YEAR_ELEMENT);
+		updateSelectOptions(node, rs);
+
+	},
+	//
+	updateMonthFilter = function(tx, rs) {
+		document.getElementById(FILTER_MONTH_ELEMENT).style.display = "block";
+		var node = document.getElementById(SELECT_MONTH_ELEMENT);
+		updateSelectOptions(node, rs);
+	},
+	//
+	updateDayFilter = function(tx, rs) {
+		document.getElementById(FILTER_DAY_ELEMENT).style.display = "block";
+		var node = document.getElementById(SELECT_DAY_ELEMENT);
+		updateSelectOptions(node, rs);
+	},
+
+	//
+	updateTotalDrainTimeStats = function(tx, rs) {
+		var rate = 0, out = "";
+		if (rs.rows.length > 0 && rs.rows.item(0).sum !== null) {
+			rate = rs.rows.item(0).sum;
+			rate = rate.toFixed(2);
+		}
+		document.getElementById(TOTAL_DRAINING_ELEMENT).innerHTML = rate + ' seconds';
+	},
+	//
+	updateTotalChargeTimeStats = function(tx, rs) {
+		var rate = 0;
+		if (rs.rows.length > 0 && rs.rows.item(0).sum !== null) {
+			rate = rs.rows.item(0).sum;
+			rate = rate.toFixed(2);
+		}
+		document.getElementById(TOTAL_CHARGING_ELEMENT).innerHTML = rate + ' seconds';
+	},
+	//
+	updateAvgDrainStats = function(tx, rs) {
+		var rate = 0, per = '';
+		if (rs.rows.length > 0 && rs.rows.item(0).avg !== null) {
+			rate = rs.rows.item(0).avg;
+			rate = (SINH / rate).toFixed(2);
+			per = "%/hour";
+		}
+		document.getElementById(AVG_DRAIN_ELEMENT).innerHTML = rate + per;
+	},
+	//
+	updateAvgChargeStats = function(tx, rs) {
+		var rate = 0, per = '';
+		if (rs.rows.length > 0 && rs.rows.item(0).avg !== null) {
+			rate = rs.rows.item(0).avg;
+			rate = (SINH / rate).toFixed(2);
+			per = "%/hour";
+		}
+		document.getElementById(AVG_CHARGE_ELEMENT).innerHTML = rate + per;
+	},
+	//
+	updateNumSessionStats = function(tx, rs) {
+		var nSessions = 0;
+		if (rs.rows.length > 0 && rs.rows.item(0).result !== null) {
+			nSessions = rs.rows.item(0).result;
+		}
+		document.getElementById(SESSION_NUM_ELEMENT).innerHTML = nSessions;
+	},
+
+	/* Database callback functions */
+	DB_RESULT = null,
+	//
+	numOfResults = function(tx, rs) {
+		console.log("numOfResults entered with " + rs.rows.length + " results");
+		DB_RESULT = rs.rows.length;
+	},
+	//
+	returnResult = function(tx, rs) {
+		DB_RESULT = rs.rows.item(0).result;
+	},
+	/* used to determine TrackingSession number to use */
+	determineSession = function(tx, rs) {
+		if (rs.rows.length === 0) {
+			TRACKSESSION = 0;
+		} else {
+			var maxsession = rs.rows.item(0).max;
+			TRACKSESSION = maxsession + 1;
+		}
+		console.log("TrackingSession = " + TRACKSESSION);
+	},
+	/* used to determine max session from historical data */
+	maxsession = function(tx, rs) {
+		if (rs.rows.length === 0) {
+			return 0;
+		} else {
+			return rs.rows.item(0).max;
+		}
+	},
 	// DATABASE HELPERS
+	updateHistStats = function(filter) {
+		/* determine if there are any historical stats for PIN */
+		var statement = "SELECT COUNT(DISTINCT session) AS result FROM " + TB_NAME + " " + filter;
+		db_query(statement, [], updateNumSessionStats, db_onError);
+		statement = 'SELECT AVG(levelchgtime) AS avg FROM ' + TB_NAME + " " + filter + " AND islevelchg=1 AND ischarging=1";
+		db_query(statement, [], updateAvgChargeStats, db_onError);
+		statement = 'SELECT AVG(levelchgtime) AS avg FROM ' + TB_NAME + " " + filter + " AND islevelchg=1 AND ischarging=0";
+		db_query(statement, [], updateAvgDrainStats, db_onError);
+		statement = 'SELECT SUM(levelchgtime) AS sum FROM ' + TB_NAME + " " + filter + " AND islevelchg=1 AND ischarging=1";
+		db_query(statement, [], updateTotalChargeTimeStats, db_onError);
+		statement = 'SELECT SUM(levelchgtime) AS sum FROM ' + TB_NAME + " " + filter + " AND islevelchg=1 AND ischarging=0";
+		db_query(statement, [], updateTotalDrainTimeStats, db_onError);
+	},
 	/* database initialization */
 	db_init = function() {
 		DEVICEPIN = blackberry.identity.uuid;
@@ -235,187 +378,17 @@ var batteryMonitor = function() {
 		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 60, 0, 1, 50, 2012, 12, 1, 12, 25, 20], db_onSuccess, db_onError);
 		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 60, 0, 1, 70, 2012, 12, 1, 12, 26, 10], db_onSuccess, db_onError);
 
-	}, updateHistStats = function(filter) {
-		/* determine if there are any historical stats for PIN */
-		var statement = "SELECT COUNT(DISTINCT session) AS result FROM " + TB_NAME + " " + filter;
-		db_query(statement, [], updateNumSessionStats, db_onError);
-		statement = 'SELECT AVG(levelchgtime) AS avg FROM ' + TB_NAME + " " + filter + " AND islevelchg=1 AND ischarging=1";
-		db_query(statement, [], updateAvgChargeStats, db_onError);
-		statement = 'SELECT AVG(levelchgtime) AS avg FROM ' + TB_NAME + " " + filter + " AND islevelchg=1 AND ischarging=0";
-		db_query(statement, [], updateAvgDrainStats, db_onError);
-		statement = 'SELECT SUM(levelchgtime) AS sum FROM ' + TB_NAME + " " + filter + " AND islevelchg=1 AND ischarging=1";
-		db_query(statement, [], updateTotalChargeTimeStats, db_onError);
-		statement = 'SELECT SUM(levelchgtime) AS sum FROM ' + TB_NAME + " " + filter + " AND islevelchg=1 AND ischarging=0";
-		db_query(statement, [], updateTotalDrainTimeStats, db_onError);
-	},
-
-	// DATABASE RESULTS FUNCTIONS //
-	dbDisplayAll = function(tx, rs) {
-		console.log("+dbDisplayAll - called with " + rs.rows.length + " rows");
-		var i=null;
-		for (i = 0; i < rs.rows.length; i++) {
-			var output = renderRow(rs.rows.item(i));
-			console.log(output);
-		}
-	},
-
-	/* returns data separated by | */
-	renderRow = function(row) {
-		return row.pin + " | " + row.os + " | " + row.session + " | " + row.level + " | " + row.ischarging + " | " + row.islevelchg + " | " + row.levelchgtime + " | " + row.year + " | " + row.month + " | " + row.day + " | " + row.hour + ":" + row.minute + ":" + row.second;
-	},
-	//
-	updateYearFilter = function(tx, rs) {
-		var node = document.getElementById(SELECT_YEAR_ELEMENT);
-		updateSelectOptions(node, rs);
-
-	},
-	//
-	updateMonthFilter = function(tx, rs) {
-		document.getElementById(FILTER_MONTH_ELEMENT).style.display = "block";
-		var node = document.getElementById(SELECT_MONTH_ELEMENT);
-		updateSelectOptions(node, rs);
-	},
-	//
-	updateDayFilter = function(tx, rs) {
-		document.getElementById(FILTER_DAY_ELEMENT).style.display = "block";
-		var node = document.getElementById(SELECT_DAY_ELEMENT);
-		updateSelectOptions(node, rs);
-	}
-	//
-	updateSelectOptions = function(select, rs) {
-		// first remove all child elements
-		while (select.hasChildNodes()) {
-			select.removeChild(select.lastChild);
-		}
-		//now repopulate it
-		var opt = document.createElement("option");
-		opt.setAttribute("value", "ALL");
-		opt.setAttribute("selected", "true");
-		opt.innerHTML = "ALL";
-		select.appendChild(opt);
-		for (var i = 0; i < rs.rows.length; i++) {
-			opt = document.createElement("option");
-			opt.setAttribute('value', rs.rows.item(i).result);
-			opt.innerHTML = rs.rows.item(i).result;
-			select.appendChild(opt);
-		}
-		select.refresh();
-	},
-	//
-	updateTotalDrainTimeStats = function(tx, rs) {
-		var rate = 0;
-		var out = "";
-		if (rs.rows.length > 0 && rs.rows.item(0).sum !== null) {
-			rate = rs.rows.item(0).sum;
-			rate = rate.toFixed(2)
-		}
-		document.getElementById(TOTAL_DRAINING_ELEMENT).innerHTML = rate + ' seconds';
-	},
-	//
-	updateTotalChargeTimeStats = function(tx, rs) {
-		var rate = 0;
-		if (rs.rows.length > 0 && rs.rows.item(0).sum !== null) {
-			rate = rs.rows.item(0).sum;
-			rate = rate.toFixed(2);
-		}
-		document.getElementById(TOTAL_CHARGING_ELEMENT).innerHTML = rate + ' seconds';
-	},
-	//
-	updateAvgDrainStats = function(tx, rs) {
-		var rate = 0;
-		var per = '';
-		if (rs.rows.length > 0 && rs.rows.item(0).avg !== null) {
-			rate = rs.rows.item(0).avg;
-			rate = (SINH / rate).toFixed(2);
-			per = "%/hour";
-		}
-		document.getElementById(AVG_DRAIN_ELEMENT).innerHTML = rate + per;
-	},
-	//
-	updateAvgChargeStats = function(tx, rs) {
-		var rate = 0;
-		var per = '';
-		if (rs.rows.length > 0 && rs.rows.item(0).avg !== null) {
-			rate = rs.rows.item(0).avg;
-			rate = (SINH / rate).toFixed(2);
-			per = "%/hour";
-		}
-		document.getElementById(AVG_CHARGE_ELEMENT).innerHTML = rate + per;
-	},
-	//
-	updateNumSessionStats = function(tx, rs) {
-		var nSessions = 0;
-		if (rs.rows.length > 0 && rs.rows.item(0).result !== null) {
-			var nSessions = rs.rows.item(0).result;
-		}
-		document.getElementById(SESSION_NUM_ELEMENT).innerHTML = nSessions;
-	},
-
-	/* Database callback functions */
-	_result = null,
-	//
-	numOfResults = function(tx, rs) {
-		console.log("numOfResults entered with " + rs.rows.length + " results");
-		_result = rs.rows.length
-	},
-	//
-	returnResult = function(tx, rs) {
-		_result = rs.rows.item(0).result;
-	},
-	/* used to determine TrackingSession number to use */
-	determineSession = function(tx, rs) {
-		if (rs.rows.length === 0) {
-			TRACKSESSION = 0;
-		} else {
-			var maxsession = rs.rows.item(0).max;
-			TRACKSESSION = maxsession + 1;
-		}
-		console.log("TrackingSession = " + TRACKSESSION);
-	},
-	/* used to determine max session from historical data */
-	maxsession = function(tx, rs) {
-		if (rs.rows.length === 0) {
-			return 0;
-		} else {
-			return rs.rows.item(0).max;
-		}
 	};
-	// Battery tracking functions //
-	//BatteryMonitor_init
-	//params
-	// 	curStateElement:	DOM Element used to track current Battery State to the User
-	// 	logElement:			DOM Element used to log updates
-	function BatteryMonitor_init() {
-		console.log("BatteryMonitor_init");
-		var date = new Date();
-		START_TIME = date.getTime();
-		/* start eventlisteners */
-		try {
-			// BB10 API
-			blackberry.event.addEventListener("batterystatus", onBatteryStatusChg);
-			console.log("BatteryMonitor--startListening for batterystatus");
-			var date = new Date();
-			if (!ISTESTING) {
-				document.getElementById(LOGGING_ELEMENT).innerHTML += getTimeStamp(date) + " starting tracking<br>";
-			}
-		} catch(err) {
-			alert("failed to start event listener: " + err);
-		}
-	}
 
 	function onBatteryStatusChg(info) {
 		console.log("+onBatteryStatusChg called");
 		try {
-			var date = new Date();
-			var curTime = date.getTime();
-			var curTime = curTime / MSINS;
+			var date = new Date(), curTime = date.getTime(), curTime = curTime / MSINS,
 			//put into seconds
-			var msg = "Plugged in:" + info.isPlugged + "<br>Battery Level:" + info.level + "%";
-			var logMsg = getTimeStamp(date);
+			msg = "Plugged in:" + info.isPlugged + "<br>Battery Level:" + info.level + "%", logMsg = getTimeStamp(date),
 
 			/* stat related vars */
-			var chgInterval = 0;
-			var isLevelChg = 0;
+			chgInterval = 0, isLevelChg = 0;
 
 			if (CUR_STATE === null) {
 				// first battery status change
@@ -465,7 +438,6 @@ var batteryMonitor = function() {
 					} else {
 						// Track drain
 						DRAIN_TIME += chgInterval;
-						;
 						DRAIN_TOTAL++;
 						logMsg = logMsg + "drain Total:" + DRAIN_TOTAL + "\ndrain Time:" + DRAIN_TIME;
 						console.log(logMsg);
@@ -474,9 +446,9 @@ var batteryMonitor = function() {
 			}
 			//console.log(info.isPlugged);
 			//console.log(info.level);
-			var drainRate = DRAIN_TOTAL / DRAIN_TIME;
+			var drainRate = DRAIN_TOTAL / DRAIN_TIME,
 			// % per second
-			var chargeRate = CHARGE_TOTAL / CHARGE_TIME;
+			chargeRate = CHARGE_TOTAL / CHARGE_TIME;
 			// % per second
 			// 60 seconds a minute|60 minutes a hour == 3600
 			if (isNumber(drainRate)) {
@@ -498,22 +470,39 @@ var batteryMonitor = function() {
 
 			INTERVAL = curTime;
 
-			var isPlugged = 0;
-			if (info.isPlugged)
+			var isPlugged = 0, year = date.getFullYear(), month = date.getMonth() + 1, day = date.getDate(), hour = date.getHours(), min = date.getMinutes(), sec = date.getSeconds(), statement = "INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			if (info.isPlugged) {
 				isPlugged = 1;
+			}
 
-			var year = date.getFullYear();
-			var month = date.getMonth() + 1;
-			var day = date.getDate();
-			var hour = date.getHours();
-			var min = date.getMinutes();
-			var sec = date.getSeconds();
-			var statement = "INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			db_query(statement, [DEVICEPIN, DEVICEOS, TRACKSESSION, info.level, isPlugged, isLevelChg, chgInterval, year, month, day, hour, min, sec], db_onSuccess, db_onError);
 			//batteryMon.webdb.addStat(DEVICEPIN, DEVICEOS, TRACKSESSION, info.level, isPlugged, isLevelChg, chgInterval, date);
 
 		} catch (err) {
 			alert("onBatteryChg::" + err);
+		}
+	}
+
+	// Battery tracking functions //
+	//batteryMonitor_init
+	//params
+	// 	curStateElement:	DOM Element used to track current Battery State to the User
+	// 	logElement:			DOM Element used to log updates
+	function batteryMonitor_init() {
+		console.log("batteryMonitor_init");
+		var date = new Date();
+		START_TIME = date.getTime();
+		/* start eventlisteners */
+		try {
+			// BB10 API
+			blackberry.event.addEventListener("batterystatus", onBatteryStatusChg);
+			console.log("BatteryMonitor--startListening for batterystatus");
+			date = new Date();
+			if (!ISTESTING) {
+				document.getElementById(LOGGING_ELEMENT).innerHTML += getTimeStamp(date) + " starting tracking<br>";
+			}
+		} catch(err) {
+			alert("failed to start event listener: " + err);
 		}
 	}
 
@@ -539,9 +528,9 @@ var batteryMonitor = function() {
 				TOTAL_CHARGING_ELEMENT = uiElements.totalCharge;
 				AVG_DRAIN_ELEMENT = uiElements.avgDrain;
 				AVG_CHARGE_ELEMENT = uiElements.avgCharge;
-				SESSION_NUM_ELEMENT = uiElements.sessionNum
+				SESSION_NUM_ELEMENT = uiElements.sessionNum;
 			}
-			console.log("Testing mode set to: " + ISTESTING)
+			console.log("Testing mode set to: " + ISTESTING);
 			db_init();
 		},
 		// method used to start monitoring battery
@@ -551,7 +540,7 @@ var batteryMonitor = function() {
 			document.getElementById(STOP_BTN_ELEMENT).style.display = "inline-block";
 			var statement = "SELECT MAX(session) as max FROM " + TB_NAME + " WHERE pin='" + DEVICEPIN + "'";
 			db_query(statement, [], determineSession, db_onError);
-			BatteryMonitor_init();
+			batteryMonitor_init();
 		},
 		// method used to stop monitoring battery
 		stop_monitor : function() {
@@ -619,6 +608,5 @@ var batteryMonitor = function() {
 			updateHistStats(DEFAULTFILTER);
 			db_query("SELECT DISTINCT year AS result FROM " + TB_NAME + " " + DEFAULTFILTER, [], updateYearFilter, db_onError);
 		}
-	}
-};
-
+	};
+}; 
