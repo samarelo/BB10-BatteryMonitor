@@ -189,6 +189,59 @@ var batteryMonitor = function() {
 		}
 	};
 
+	function db_insertDemoData() {
+		// delete everything from table
+		db_query("DELETE FROM " + TB_NAME, [], db_onSuccess, db_onError);
+		// insert demo data
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 100, 0, 0, 0, 2011, 12, 25, 14, 30, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 99, 0, 1, 120, 2011, 12, 25, 14, 32, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 98, 0, 1, 180, 2011, 12, 25, 14, 35, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 97, 0, 1, 240, 2011, 12, 25, 14, 39, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 96, 0, 1, 300, 2011, 12, 25, 14, 44, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 95, 0, 1, 360, 2011, 12, 25, 14, 50, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 94, 0, 1, 420, 2011, 12, 25, 14, 57, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 93, 0, 1, 480, 2011, 12, 25, 15, 05, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 92, 0, 1, 540, 2011, 12, 25, 15, 14, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 91, 0, 1, 600, 2011, 12, 25, 15, 24, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 90, 0, 1, 660, 2011, 12, 25, 15, 35, 00], db_onSuccess, db_onError);
+
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 2, 2, 1, 0, 0, 2012, 11, 16, 23, 00, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 2, 3, 1, 1, 60, 2012, 11, 16, 23, 01, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 2, 4, 1, 1, 60, 2012, 11, 16, 23, 02, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 2, 5, 1, 1, 60, 2012, 11, 16, 23, 03, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 2, 6, 1, 1, 60, 2012, 11, 16, 23, 04, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 2, 7, 1, 1, 60, 2012, 11, 16, 23, 05, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 2, 8, 1, 1, 60, 2012, 11, 16, 23, 06, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 2, 9, 1, 1, 60, 2012, 11, 16, 23, 07, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 2, 10, 1, 1, 60, 2012, 11, 16, 23, 08, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 2, 11, 1, 1, 60, 2012, 11, 16, 23, 09, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 2, 12, 1, 1, 60, 2012, 11, 16, 23, 10, 00], db_onSuccess, db_onError);
+
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 50, 1, 0, 0, 2012, 12, 01, 12, 00, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 51, 1, 1, 65, 2012, 12, 01, 12, 01, 05], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 52, 1, 1, 65, 2012, 12, 01, 12, 02, 10], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 53, 1, 1, 65, 2012, 12, 01, 12, 03, 15], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 54, 1, 1, 65, 2012, 12, 01, 12, 04, 20], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 55, 1, 1, 65, 2012, 12, 01, 12, 05, 25], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 56, 1, 1, 65, 2012, 12, 01, 12, 06, 30], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 57, 1, 1, 65, 2012, 12, 01, 12, 07, 35], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 58, 1, 1, 65, 2012, 12, 01, 12, 08, 40], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 59, 1, 1, 65, 2012, 12, 01, 12, 09, 45], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 60, 1, 1, 65, 2012, 12, 01, 12, 10, 50], db_onSuccess, db_onError);
+
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 60, 0, 0, 0, 2012, 12, 01, 12, 11, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 60, 0, 1, 120, 2012, 12, 01, 12, 12, 00], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 60, 0, 1, 125, 2012, 12, 01, 12, 14, 05], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 60, 0, 1, 130, 2012, 12, 01, 12, 16, 15], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 60, 0, 1, 135, 2012, 12, 01, 12, 18, 30], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 60, 0, 1, 140, 2012, 12, 01, 12, 20, 50], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 60, 0, 1, 100, 2012, 12, 01, 12, 22, 30], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 60, 0, 1, 120, 2012, 12, 01, 12, 24, 30], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 60, 0, 1, 50, 2012, 12, 01, 12, 25, 20], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 60, 0, 1, 70, 2012, 12, 01, 12, 26, 10], db_onSuccess, db_onError);
+
+	}
+
 	function updateHistStats(filter) {
 		/* determine if there are any historical stats for PIN */
 		var statement = "SELECT COUNT(DISTINCT session) AS result FROM " + TB_NAME + " " + filter;
@@ -555,7 +608,7 @@ var batteryMonitor = function() {
 		},
 		clearHistory : function() {
 			console.log("clearHistory called");
-			var statement = "DROP TABLE " + TB_NAME;
+			var statement = "DELETE FROM " + TB_NAME;
 			db_query(statement, [], db_onSuccess, db_onError);
 		},
 		showTab : function(id) {
@@ -566,6 +619,12 @@ var batteryMonitor = function() {
 		},
 		doDBQuery : function(statement, items, onSuccess, onError) {
 			db_query(statement, items, onSuccess, onError);
+		},
+		doInsertDemoData : function() {
+			alert("Do you want to overwrite all currently stored data with demo data?");
+			db_insertDemoData();
+			updateHistStats(DEFAULTFILTER);
+			db_query("SELECT DISTINCT year AS result FROM " + TB_NAME + " " + DEFAULTFILTER, [], updateYearFilter, db_onError);
 		}
 	}
 };
