@@ -82,7 +82,7 @@ var batteryMonitor = function() {
 	// used to hold database
 	DB_OBJECT = null,
 	// used as default filter for History
-	DEFAULTFILTER = null;
+	DEFAULTFILTER = null,
 
 	// Helper functions //
 	// getTimeStamp
@@ -90,7 +90,7 @@ var batteryMonitor = function() {
 	// @parm date (date element)
 	// returns timpstamp in following format
 	//  "YYYY-MM-DD HH:MM:SS:MSX
-	function getTimeStamp(date) {
+	getTimeStamp = function(date) {
 		try {
 			var timestamp = date.getFullYear() + "-";
 			if ((date.getMonth() + 1) < 10) {
@@ -122,55 +122,52 @@ var batteryMonitor = function() {
 		} catch (err) {
 			alert("error getting TimeStamp -" + err);
 		}
-	}
+	},
 
 	// confirms value is a number
-	function isNumber(value) {
+	isNumber = function(value) {
 		return typeof value === 'number' && isFinite(value);
-	}
+	},
 
 	// DOM Manipulation functions
-	function hideAllTabs() {
+	hideAllTabs = function() {
 		var i;
 		for ( i = 0; i < TABS_ARRAY.length; i++) {
 			document.getElementById(TABS_ARRAY[i]).style.display = 'none';
 		}
-	}
-
-	var FILTER_W_YEAR = "";
-	var FILTER_W_MONTH = "";
+	}, FILTER_W_YEAR = "", FILTER_W_MONTH = "",
 
 	// DATABASE FUNCTIONS //
 
 	// Database query functions //
 	// open database
-	var db_open = function() {
+	db_open = function() {
 		console.log("attempting to open database");
 		DB_OBJECT = openDatabase(DB_NAME, DB_VERSION, DB_DISPLAYNAME, DB_ESTSIZE, function() {
 			console.log("opened database successfully!");
 		});
-	}
+	},
 	// generic error callback
-	var db_onError = function(tx, e) {
+	db_onError = function(tx, e) {
 		var msg = "Database Error: " + e.message;
 		alert(msg);
 		console.log(msg);
-	}
+	},
 	// generic success callback
-	var db_onSuccess = function(tx, rs) {
+	db_onSuccess = function(tx, rs) {
 		//alert("Successful");
-	}
+	},
 	// can be used for all database queries
-	var db_query = function(statement, items, onSuccess, onError) {
+	db_query = function(statement, items, onSuccess, onError) {
 		var db = DB_OBJECT;
 		console.log(statement);
 		db.transaction(function(tx) {
 			tx.executeSql(statement, items, onSuccess, onError);
 		});
-	}
+	},
 	// DATABASE HELPERS
 	/* database initialization */
-	function db_init() {
+	db_init = function() {
 		DEVICEPIN = blackberry.identity.uuid;
 		DEVICEOS = blackberry.system.softwareVersion;
 		//TRACKSESSION = 0;
@@ -187,9 +184,7 @@ var batteryMonitor = function() {
 			updateHistStats(DEFAULTFILTER);
 			db_query(statement, [], updateYearFilter, db_onError);
 		}
-	}
-
-	function db_insertDemoData() {
+	}, db_insertDemoData = function() {
 		// delete everything from table
 		db_query("DELETE FROM " + TB_NAME, [], db_onSuccess, db_onError);
 		// insert demo data
@@ -240,9 +235,7 @@ var batteryMonitor = function() {
 		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 60, 0, 1, 50, 2012, 12, 1, 12, 25, 20], db_onSuccess, db_onError);
 		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 60, 0, 1, 70, 2012, 12, 1, 12, 26, 10], db_onSuccess, db_onError);
 
-	}
-
-	function updateHistStats(filter) {
+	}, updateHistStats = function(filter) {
 		/* determine if there are any historical stats for PIN */
 		var statement = "SELECT COUNT(DISTINCT session) AS result FROM " + TB_NAME + " " + filter;
 		db_query(statement, [], updateNumSessionStats, db_onError)
@@ -254,40 +247,41 @@ var batteryMonitor = function() {
 		db_query(statement, [], updateTotalChargeTimeStats, db_onError);
 		statement = 'SELECT SUM(levelchgtime) AS sum FROM ' + TB_NAME + " " + filter + " AND islevelchg=1 AND ischarging=0";
 		db_query(statement, [], updateTotalDrainTimeStats, db_onError);
-	}
+	},
 
 	// DATABASE RESULTS FUNCTIONS //
-	function dbDisplayAll(tx, rs) {
+	dbDisplayAll = function(tx, rs) {
 		console.log("+dbDisplayAll - called with " + rs.rows.length + " rows");
 		for (var i = 0; i < rs.rows.length; i++) {
 			var output = renderRow(rs.rows.item(i));
 			console.log(output);
 		}
-	}
+	},
 
 	/* returns data separated by | */
-	function renderRow(row) {
+	renderRow = function(row) {
 		return row.pin + " | " + row.os + " | " + row.session + " | " + row.level + " | " + row.ischarging + " | " + row.islevelchg + " | " + row.levelchgtime + " | " + row.year + " | " + row.month + " | " + row.day + " | " + row.hour + ":" + row.minute + ":" + row.second;
-	}
-
-	function updateYearFilter(tx, rs) {
+	},
+	//
+	updateYearFilter = function(tx, rs) {
 		var node = document.getElementById(SELECT_YEAR_ELEMENT);
 		updateSelectOptions(node, rs);
-	}
 
-	function updateMonthFilter(tx, rs) {
+	},
+	//
+	updateMonthFilter = function(tx, rs) {
 		document.getElementById(FILTER_MONTH_ELEMENT).style.display = "block";
 		var node = document.getElementById(SELECT_MONTH_ELEMENT);
 		updateSelectOptions(node, rs);
-	}
-
-	function updateDayFilter(tx, rs) {
+	},
+	//
+	updateDayFilter = function(tx, rs) {
 		document.getElementById(FILTER_DAY_ELEMENT).style.display = "block";
 		var node = document.getElementById(SELECT_DAY_ELEMENT);
 		updateSelectOptions(node, rs);
 	}
-
-	function updateSelectOptions(select, rs) {
+	//
+	updateSelectOptions = function(select, rs) {
 		// first remove all child elements
 		while (select.hasChildNodes()) {
 			select.removeChild(select.lastChild);
@@ -305,9 +299,9 @@ var batteryMonitor = function() {
 			select.appendChild(opt);
 		}
 		select.refresh();
-	}
-
-	function updateTotalDrainTimeStats(tx, rs) {
+	},
+	//
+	updateTotalDrainTimeStats = function(tx, rs) {
 		var rate = 0;
 		var out = "";
 		if (rs.rows.length > 0 && rs.rows.item(0).sum !== null) {
@@ -315,18 +309,18 @@ var batteryMonitor = function() {
 			rate = rate.toFixed(2)
 		}
 		document.getElementById(TOTAL_DRAINING_ELEMENT).innerHTML = rate + ' seconds';
-	}
-
-	function updateTotalChargeTimeStats(tx, rs) {
+	},
+	//
+	updateTotalChargeTimeStats = function(tx, rs) {
 		var rate = 0;
 		if (rs.rows.length > 0 && rs.rows.item(0).sum !== null) {
 			rate = rs.rows.item(0).sum;
 			rate = rate.toFixed(2);
 		}
 		document.getElementById(TOTAL_CHARGING_ELEMENT).innerHTML = rate + ' seconds';
-	}
-
-	function updateAvgDrainStats(tx, rs) {
+	},
+	//
+	updateAvgDrainStats = function(tx, rs) {
 		var rate = 0;
 		var per = '';
 		if (rs.rows.length > 0 && rs.rows.item(0).avg !== null) {
@@ -335,9 +329,9 @@ var batteryMonitor = function() {
 			per = "%/hour";
 		}
 		document.getElementById(AVG_DRAIN_ELEMENT).innerHTML = rate + per;
-	}
-
-	function updateAvgChargeStats(tx, rs) {
+	},
+	//
+	updateAvgChargeStats = function(tx, rs) {
 		var rate = 0;
 		var per = '';
 		if (rs.rows.length > 0 && rs.rows.item(0).avg !== null) {
@@ -346,29 +340,29 @@ var batteryMonitor = function() {
 			per = "%/hour";
 		}
 		document.getElementById(AVG_CHARGE_ELEMENT).innerHTML = rate + per;
-	}
-
-	function updateNumSessionStats(tx, rs) {
+	},
+	//
+	updateNumSessionStats = function(tx, rs) {
 		var nSessions = 0;
 		if (rs.rows.length > 0 && rs.rows.item(0).result !== null) {
 			var nSessions = rs.rows.item(0).result;
 		}
 		document.getElementById(SESSION_NUM_ELEMENT).innerHTML = nSessions;
-	}
+	},
 
 	/* Database callback functions */
-	var _result = null;
-	function numOfResults(tx, rs) {
+	_result = null,
+	//
+	numOfResults = function(tx, rs) {
 		console.log("numOfResults entered with " + rs.rows.length + " results");
 		_result = rs.rows.length
-	}
-
-	function returnResult(tx, rs) {
+	},
+	//
+	returnResult = function(tx, rs) {
 		_result = rs.rows.item(0).result;
-	}
-
+	},
 	/* used to determine TrackingSession number to use */
-	function determineSession(tx, rs) {
+	determineSession = function(tx, rs) {
 		if (rs.rows.length === 0) {
 			TRACKSESSION = 0;
 		} else {
@@ -376,17 +370,15 @@ var batteryMonitor = function() {
 			TRACKSESSION = maxsession + 1;
 		}
 		console.log("TrackingSession = " + TRACKSESSION);
-	}
-
+	},
 	/* used to determine max session from historical data */
-	function maxsession(tx, rs) {
+	maxsession = function(tx, rs) {
 		if (rs.rows.length === 0) {
 			return 0;
 		} else {
 			return rs.rows.item(0).max;
 		}
-	}
-
+	};
 	// Battery tracking functions //
 	//BatteryMonitor_init
 	//params
