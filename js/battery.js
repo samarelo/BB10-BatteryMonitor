@@ -378,9 +378,9 @@ var batteryMonitor = function() {
 		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 60, 0, 1, 50, 2012, 12, 1, 12, 25, 20], db_onSuccess, db_onError);
 		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 3, 60, 0, 1, 70, 2012, 12, 1, 12, 26, 10], db_onSuccess, db_onError);
 
-	};
-
-	function onBatteryStatusChg(info) {
+	},
+	//
+	onBatteryStatusChg = function(info) {
 		console.log("+onBatteryStatusChg called");
 		try {
 			var date = new Date(), curTime = date.getTime(), curTime = curTime / MSINS,
@@ -481,14 +481,14 @@ var batteryMonitor = function() {
 		} catch (err) {
 			alert("onBatteryChg::" + err);
 		}
-	}
+	},
 
 	// Battery tracking functions //
 	//batteryMonitor_init
 	//params
 	// 	curStateElement:	DOM Element used to track current Battery State to the User
 	// 	logElement:			DOM Element used to log updates
-	function batteryMonitor_init() {
+	batteryMonitor_init = function() {
 		console.log("batteryMonitor_init");
 		var date = new Date();
 		START_TIME = date.getTime();
@@ -504,8 +504,7 @@ var batteryMonitor = function() {
 		} catch(err) {
 			alert("failed to start event listener: " + err);
 		}
-	}
-
+	};
 	// objects available to outside world
 	return {
 		// method to initialize batteryMonitor
@@ -609,4 +608,4 @@ var batteryMonitor = function() {
 			db_query("SELECT DISTINCT year AS result FROM " + TB_NAME + " " + DEFAULTFILTER, [], updateYearFilter, db_onError);
 		}
 	};
-}; 
+};
