@@ -173,7 +173,7 @@ var batteryMonitor = function() {
 		//TRACKSESSION = 0;
 		console.log("+db_init called");
 		db_open();
-		var statement = 'CREATE TABLE IF NOT EXISTS ' + TB_NAME + '(ID INTEGER PRIMARY KEY ASC, pin STRING, os STRING, session INTEGER, level INTEGER, ischarging INTEGER, islevelchg INTEGER, levelchgtime INTEGER, year INTEGER, month INTEGER, day INTEGER, hour INTEGER, minute INTEGER, second INTEGER)'
+		var statement = 'CREATE TABLE IF NOT EXISTS ' + TB_NAME + '(ID INTEGER PRIMARY KEY ASC, pin STRING, os STRING, session INTEGER, level INTEGER, ischarging INTEGER, islevelchg INTEGER, levelchgtime INTEGER, year INTEGER, month INTEGER, day INTEGER, hour INTEGER, minute INTEGER, second INTEGER)';
 		db_query(statement, [], db_onSuccess, db_onError);
 
 		statement = "SELECT * FROM " + TB_NAME;
@@ -195,7 +195,7 @@ var batteryMonitor = function() {
 		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 96, 0, 1, 300, 2011, 12, 25, 14, 44, 0], db_onSuccess, db_onError);
 		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 95, 0, 1, 360, 2011, 12, 25, 14, 50, 0], db_onSuccess, db_onError);
 		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 94, 0, 1, 420, 2011, 12, 25, 14, 57, 0], db_onSuccess, db_onError);
-		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 93, 0, 1, 480, 2011, 12, 25, 15, 05, 0], db_onSuccess, db_onError);
+		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 93, 0, 1, 480, 2011, 12, 25, 15, 5, 0], db_onSuccess, db_onError);
 		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 92, 0, 1, 540, 2011, 12, 25, 15, 14, 0], db_onSuccess, db_onError);
 		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 91, 0, 1, 600, 2011, 12, 25, 15, 24, 0], db_onSuccess, db_onError);
 		db_query("INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", [DEVICEPIN, DEVICEOS, 1, 90, 0, 1, 660, 2011, 12, 25, 15, 35, 0], db_onSuccess, db_onError);
@@ -238,11 +238,11 @@ var batteryMonitor = function() {
 	}, updateHistStats = function(filter) {
 		/* determine if there are any historical stats for PIN */
 		var statement = "SELECT COUNT(DISTINCT session) AS result FROM " + TB_NAME + " " + filter;
-		db_query(statement, [], updateNumSessionStats, db_onError)
+		db_query(statement, [], updateNumSessionStats, db_onError);
 		statement = 'SELECT AVG(levelchgtime) AS avg FROM ' + TB_NAME + " " + filter + " AND islevelchg=1 AND ischarging=1";
 		db_query(statement, [], updateAvgChargeStats, db_onError);
 		statement = 'SELECT AVG(levelchgtime) AS avg FROM ' + TB_NAME + " " + filter + " AND islevelchg=1 AND ischarging=0";
-		db_query(statement, [], updateAvgDrainStats, db_onError)
+		db_query(statement, [], updateAvgDrainStats, db_onError);
 		statement = 'SELECT SUM(levelchgtime) AS sum FROM ' + TB_NAME + " " + filter + " AND islevelchg=1 AND ischarging=1";
 		db_query(statement, [], updateTotalChargeTimeStats, db_onError);
 		statement = 'SELECT SUM(levelchgtime) AS sum FROM ' + TB_NAME + " " + filter + " AND islevelchg=1 AND ischarging=0";
@@ -252,7 +252,8 @@ var batteryMonitor = function() {
 	// DATABASE RESULTS FUNCTIONS //
 	dbDisplayAll = function(tx, rs) {
 		console.log("+dbDisplayAll - called with " + rs.rows.length + " rows");
-		for (var i = 0; i < rs.rows.length; i++) {
+		var i=null;
+		for (i = 0; i < rs.rows.length; i++) {
 			var output = renderRow(rs.rows.item(i));
 			console.log(output);
 		}
