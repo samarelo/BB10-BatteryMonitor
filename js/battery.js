@@ -79,7 +79,7 @@ var batteryMonitor = function() {'use strict';
 	// Database Variables //
 	DB_NAME = "BatteryMonDB", DB_VERSION = "0.1", DB_DISPLAYNAME = "ShaunsApps Battery Monitor database", DB_ESTSIZE = 1024 * 1024, TB_NAME = "stats", DEVICEPIN = null, DEVICEOS = null, TRACKSESSION = null,
 	// used to hold database
-	_db = null,
+	DB_OBJECT = null,
 	// used as default filter for History
 	DEFAULTFILTER = null;
 
@@ -139,7 +139,7 @@ var batteryMonitor = function() {'use strict';
 	// open database
 	var db_open = function() {
 		console.log("attempting to open database");
-		_db = openDatabase(DB_NAME, DB_VERSION, DB_DISPLAYNAME, DB_ESTSIZE, function() {
+		DB_OBJECT = openDatabase(DB_NAME, DB_VERSION, DB_DISPLAYNAME, DB_ESTSIZE, function() {
 			console.log("opened database successfully!");
 		});
 	};
@@ -155,7 +155,7 @@ var batteryMonitor = function() {'use strict';
 	};
 	// can be used for all database queries
 	var db_query = function(statement, items, onSuccess, onError) {
-		var db = _db;
+		var db = DB_OBJECT;
 		console.log(statement);
 		db.transaction(function(tx) {
 			tx.executeSql(statement, items, onSuccess, onError);
