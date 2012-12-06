@@ -9,11 +9,15 @@ How to Use:
 
   How to start monitoring
   
-    From the Main pane, click on the Start button. This will start monitoring the battery life.
+    From the MAIN pane, click on the Start button. This will start monitoring the battery life.
 
 How to stop monitoring
 
-    From the Main pane, click on the Stop  button. This will stop monitoring the battery life.
+    From the MAIN pane, click on the Stop  button. This will stop monitoring the battery life.
+    
+** Use DEMO data instead **
+
+    From ABOUT pane, click on the Use Demo Data button
 
 How to view history data
 
@@ -34,4 +38,17 @@ How it works:
   The database has one table called 'stats' with the following columns.
   
     1. Integer ID: (Primary Key) ID for item
+    2. String pin: PIN of device
+    3. String os: OS version of device
+    4. Integer session: battery monitoring session number
+    5. Integer level: battery level
+    6. Integer ischarging: 1=charging, 0=not charging
+    7. Integer islevelchg: 0=battery level did not change, 1=battery level changed
+    8. Integer levelchgtime: how much time (seconds) it took for battery level to change
+    9. Integer year
+    10. Integer month
+    11. Integer day
+    12. Integer hour
+    13. Integer minute
+    14. Integer second
     
