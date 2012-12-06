@@ -137,8 +137,8 @@ var batteryMonitor = function() {
 		}
 	}
 
-	var _filterWyear = "";
-	var _filterWmonth = "";
+	var FILTER_W_YEAR = "";
+	var FILTER_W_MONTH = "";
 
 	// DATABASE FUNCTIONS //
 
@@ -579,13 +579,13 @@ var batteryMonitor = function() {
 				document.getElementById(FILTER_MONTH_ELEMENT).style.display = "none";
 				document.getElementById(FILTER_DAY_ELEMENT).style.display = "none";
 			}
-			_filterWyear = filterByYear;
+			FILTER_W_YEAR = filterByYear;
 			updateHistStats(filterByYear);
 		},
 
 		filterByMonth : function(month) {
 			console.log("++ selected Month " + month);
-			var filter = _filterWyear;
+			var filter = FILTER_W_YEAR;
 			if (month !== "ALL") {
 				filter = filter + " AND month=" + month;
 				var statement = "SELECT DISTINCT day AS result FROM " + TB_NAME + " " + filter;
@@ -594,13 +594,13 @@ var batteryMonitor = function() {
 				/* hide day filter */
 				document.getElementById(FILTER_DAY_ELEMENT).style.display = "none";
 			}
-			_filterWmonth = filter;
+			FILTER_W_MONTH = filter;
 			updateHistStats(filter);
 		},
 
 		filterByDay : function(day) {
 			console.log("++ selected Day " + day);
-			var filter = _filterWmonth;
+			var filter = FILTER_W_MONTH;
 			if (day !== "ALL") {
 				filter = filter + " AND day=" + day;
 			}
