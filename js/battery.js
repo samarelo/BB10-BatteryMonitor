@@ -8,88 +8,80 @@
 //		stopButton: "ID for stop button"
 // });
 
-var batteryMonitor = function() {
-	'use strict';
+var batteryMonitor = function() {'use strict';
 	// UNIVERSAL variables //
 	// used to determine if module is being call for test suites
 	var ISTESTING = true,
 	// DOM/UI related variables //
 	// used to store Element for displaying current state
-		CURRENT_STATE_ELEMENT = null,
+	CURRENT_STATE_ELEMENT = null,
 	// used to store Element for displaying logging info
-		LOGGING_ELEMENT = null,
+	LOGGING_ELEMENT = null,
 	// used to store Element for startButton
-		START_BTN_ELEMENT = null,
+	START_BTN_ELEMENT = null,
 	// used to store Element for stopButton
-		STOP_BTN_ELEMENT = null,
+	STOP_BTN_ELEMENT = null,
 	// array of elements for GUI tabs
-		TABS_ARRAY = [],
+	TABS_ARRAY = [],
 	// element for Year selection
-		SELECT_YEAR_ELEMENT = null,
+	SELECT_YEAR_ELEMENT = null,
 	// element for Month selection
-		SELECT_MONTH_ELEMENT = null,
+	SELECT_MONTH_ELEMENT = null,
 	// element for Day selection
-		SELECT_DAY_ELEMENT = null,
+	SELECT_DAY_ELEMENT = null,
 	// element for displaying Month selection
-		FILTER_MONTH_ELEMENT = null,
+	FILTER_MONTH_ELEMENT = null,
 	// element for displaying Day selection
-		FILTER_DAY_ELEMENT = null,
+	FILTER_DAY_ELEMENT = null,
 	// element for displaying total draining rate
-		TOTAL_DRAINING_ELEMENT = null,
+	TOTAL_DRAINING_ELEMENT = null,
 	// element for displaying total charging rate
-		TOTAL_CHARGING_ELEMENT = null,
+	TOTAL_CHARGING_ELEMENT = null,
 	// element for displaying avg drain rate
-		AVG_DRAIN_ELEMENT = null,
+	AVG_DRAIN_ELEMENT = null,
 	// element for displaying avg charge rate
-		AVG_CHARGE_ELEMENT = null,
+	AVG_CHARGE_ELEMENT = null,
 	// element for displaying numer of sessions
-		SESSION_NUM_ELEMENT = null,
+	SESSION_NUM_ELEMENT = null,
 
 	// Battery Status tracking variables
 	// store current battery level
-		CUR_LVL = 0,
+	CUR_LVL = 0,
 	// current state (isPlugged) [True/False]
-		CUR_STATE = null,
+	CUR_STATE = null,
 	// track length of level
-		LVL_TIME = null,
+	LVL_TIME = null,
 	// track length of state
-		STATE_TIME = null,
+	STATE_TIME = null,
 	// track tracking interval
-		START_TIME = null,
+	START_TIME = null,
 	// track amount of time between battery status change
-		INTERVAL = null,
+	INTERVAL = null,
 	// amount of time device has been in charging state
-		CHARGE_TIME = 0,
+	CHARGE_TIME = 0,
 	// amount of time device has been in draining state
-		DRAIN_TIME = 0,
+	DRAIN_TIME = 0,
 	// total amount of charge completed
-		CHARGE_TOTAL = 0,
+	CHARGE_TOTAL = 0,
 	// total amount of drain completed
-		DRAIN_TOTAL = 0,
+	DRAIN_TOTAL = 0,
 	// used to identify Initial Battery Level read
 	// we want to ignore the initial reading as it will provide
 	//incorrect calculations							*/
-		IS_INITLEVEL = true,
+	IS_INITLEVEL = true,
 
 	// MAGIC NUMBERS //
 	// # of milliseconds in a second
-		MSINS = 1000,
+	MSINS = 1000,
 	// # of seconds in an hour
-		SINH = 60 * 60,
+	SINH = 60 * 60,
 
 	// Database Variables //
-		DB_NAME = "BatteryMonDB",
-		DB_VERSION = "0.1",
-		DB_DISPLAYNAME = "ShaunsApps Battery Monitor database",
-		DB_ESTSIZE = 1024 * 1024,
-		TB_NAME = "stats",
-		DEVICEPIN = null,
-		DEVICEOS = null,
-		TRACKSESSION = null,
+	DB_NAME = "BatteryMonDB", DB_VERSION = "0.1", DB_DISPLAYNAME = "ShaunsApps Battery Monitor database", DB_ESTSIZE = 1024 * 1024, TB_NAME = "stats", DEVICEPIN = null, DEVICEOS = null, TRACKSESSION = null,
 	// used to hold database
-		_db = null,
+	_db = null,
 	// used as default filter for History
-		DEFAULTFILTER = null;
+	DEFAULTFILTER = null;
 
 	// Helper functions //
 	// getTimeStamp
