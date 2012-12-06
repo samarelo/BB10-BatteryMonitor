@@ -5,6 +5,12 @@ Author: Shaun Amarelo
 
 Description: A Battery monitoring application for BlackBerry 10 devices.
 
+Live Demo: http://shaunsapps.com/mu/battery/index.html 
+
+[*Ripple extension in Chrome is required: https://developer.blackberry.com/html5/download/]
+
+
+
 How to Use: 
 
   How to start monitoring
