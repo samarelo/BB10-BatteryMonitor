@@ -1,15 +1,15 @@
 <div data-bb-type="screen" data-bb-effect="slide-left">
 	<div data-bb-type="pill-buttons">
-		<div data-bb-type="pill-button" data-bb-selected="true" onclick="saBatteryMon.showTab('main');">
+		<div id="tab_main" data-bb-type="pill-button" data-bb-selected="true">
 			Main
 		</div>
-		<div data-bb-type="pill-button" onclick="saBatteryMon.showTab('stats');">
+		<div id="tab_stats" data-bb-type="pill-button">
 			Stats
 		</div>
 		<!--<div data-bb-type="pill-button" onclick="saBatteryMon.showTab('logs');">
 		Logs
 		</div>-->
-		<div data-bb-type="pill-button" onclick="saBatteryMon.showTab('about');">
+		<div  id="tab_about" data-bb-type="pill-button">
 			About
 		</div>
 	</div>
@@ -26,10 +26,10 @@
 			<br />
 			Avg Charge Rate:
 		</div>
-		<div id="startButton" data-bb-type="button" onclick="saBatteryMon.start_monitor('currentState','logsOutput');">
+		<div id="startButton" data-bb-type="button">
 			Start
 		</div>
-		<div id="stopButton" data-bb-type="button" onclick="saBatteryMon.stop_monitor();" style="display:none">
+		<div id="stopButton" data-bb-type="button">
 			Stop
 		</div>
 	</div>
@@ -56,19 +56,19 @@
 			<span style="text-decoration:underline;">Filter Stats By:</span>
 			<div id="filterDay" style="display:none;">
 				Day
-				<select data-bb-style="stretch" id="selectDay" onchange="saBatteryMon.filterByDay(this.value);">
+				<select data-bb-style="stretch" id="selectDay">
 					<option value="ALL" selected="true">ALL</option>
 				</select>
 			</div>
 			<div id="filterMonth" style="display:none;">
 				Month
-				<select data-bb-style="stretch" id="selectMonth" onchange="saBatteryMon.filterByMonth(this.value);">
+				<select data-bb-style="stretch" id="selectMonth">
 					<option value="ALL" selected="true">ALL</option>
 				</select>
 			</div>
 			<div>
 				Year
-				<select data-bb-style="stretch" id="selectYear" onchange="saBatteryMon.filterByYear(this.value);">
+				<select data-bb-style="stretch" id="selectYear">
 					<option value="ALL" selected="true">ALL</option>
 				</select>
 			</div>
@@ -116,7 +116,7 @@
 				</li>
 			</ul>
 		</div>
-		<div id="demoButton" data-bb-type="button" onclick="saBatteryMon.doInsertDemoData();">
+		<div id="demoButton" data-bb-type="button">
 			Use Demo Data
 		</div>
 	</div>
