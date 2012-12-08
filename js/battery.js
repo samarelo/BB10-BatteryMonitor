@@ -518,7 +518,7 @@ var batteryMonitor = function() {
 	// objects available to outside world
 	return {
 		// method to initialize batteryMonitor
-		init : function(uiElements) {
+		init : function(uiElements,callback) {
 			// initialize ui /dom elements
 			// use empty array for test suite
 			if (uiElements.isTesting === false) {
@@ -541,6 +541,8 @@ var batteryMonitor = function() {
 			}
 			console.log("Testing mode set to: " + ISTESTING);
 			db_init();
+			callback();
+			
 		},
 		// method used to start monitoring battery
 		start_monitor : function() {
