@@ -46,7 +46,7 @@
 							console.log("battery monitor has been initialized");
 							var ele = null;
 							document.getElementById("tab_about").addEventListener('click', function() {
-								saBatteryMon.showTab('main');
+								saBatteryMon.showTab('about');
 							}, false);
 							document.getElementById("tab_stats").addEventListener("click", function() {
 								saBatteryMon.showTab("stats");
@@ -56,6 +56,16 @@
 							}, false);
 							document.getElementById("startButton").addEventListener("click", saBatteryMon.start_monitor, false);
 							document.getElementById("stopButton").addEventListener("click", saBatteryMon.stop_monitor, false);
+							document.getElementById("demoButton").addEventListener("click", saBatteryMon.doInsertDemoData, false);
+							document.getElementById("selectDay").addEventListener("change", function() {
+								saBatteryMon.filterByDay(document.getElementById("selectDay").value);
+							}, false);
+							document.getElementById("selectMonth").addEventListener("change", function() {
+								saBatteryMon.filterByMonth(document.getElementById("selectMonth").value);
+							}, false);
+							document.getElementById("selectYear").addEventListener("change", function() {
+								saBatteryMon.filterByYear(document.getElementById("selectYear").value);
+							}, false);
 						});
 					}
 				});
