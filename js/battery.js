@@ -289,11 +289,13 @@ var batteryMonitor = function() {
 	},
 	/* used to determine max session from historical data */
 	maxsession = function(tx, rs) {
+		var result=0;
 		if (rs.rows.length === 0) {
-			return 0;
+			result = 0;
 		} else {
-			return rs.rows.item(0).max;
+			result = rs.rows.item(0).max;
 		}
+		return result;
 	},
 	// DATABASE HELPERS
 	updateHistStats = function(filter) {
