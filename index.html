@@ -45,16 +45,17 @@
 						}, function() {
 							console.log("battery monitor has been initialized");
 							var ele = null;
-							document.getElementById("tab_about").setAttribute("onclick", function() {
+							document.getElementById("tab_about").addEventListener('click', function() {
 								saBatteryMon.showTab('main');
-							});
-							document.getElementById("tab_stats").setAttribute("onclick", function() {
+							}, false);
+							document.getElementById("tab_stats").addEventListener("click", function() {
 								saBatteryMon.showTab("stats");
-							});
-							document.getElementById("tab_main").setAttribute("onclick", function() {
+							}, false);
+							document.getElementById("tab_main").addEventListener("click", function() {
 								saBatteryMon.showTab("main");
-							});
-
+							}, false);
+							document.getElementById("startButton").addEventListener("click", saBatteryMon.start_monitor, false);
+							document.getElementById("stopButton").addEventListener("click", saBatteryMon.stop_monitor, false);
 						});
 					}
 				});
