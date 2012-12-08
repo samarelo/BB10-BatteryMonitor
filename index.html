@@ -9,11 +9,12 @@
 		<script type="text/javascript" src='local:///chrome/webworks.js'></script>
 		<script id="batteryJS" type="text/javascript" src="js/battery.js"></script>
 		<script type="text/javascript">
-			var saBatteryMon = batteryMonitor();
 			function onwebworksready() {
 				console.log('onwebworksready');
 				document.removeEventListener('webworksready', onwebworksready, false);
 				// setup batteryMonitor
+				var saBatteryMon = batteryMonitor();
+
 				bb.init({
 					actionBarDark : true,
 					controlsDark : true,
@@ -40,9 +41,22 @@
 							avgCharge : 'statsAvgCharge',
 							sessionNum : 'statsSessionNum',
 							avgLevel : 'statsAvgLevel',
-							isTesting: false
+							isTesting : false
+						}, function() {
+							console.log("battery monitor has been initialized");
+							var ele = null;
+							document.getElementById("tab_about").setAttribute("onclick", function() {
+								saBatteryMon.showTab('main');
+							});
+							document.getElementById("tab_stats").setAttribute("onclick", function() {
+								saBatteryMon.showTab("stats");
+							});
+							document.getElementById("tab_main").setAttribute("onclick", function() {
+								saBatteryMon.showTab("main");
+							});
+
 						});
-					},
+					}
 				});
 				bb.pushScreen('battery.html', 'battery');
 			}
