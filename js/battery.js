@@ -132,7 +132,7 @@ var batteryMonitor = function() {
 	// DOM Manipulation functions
 	hideAllTabs = function() {
 		var i;
-		for ( i = 0; i < TABS_ARRAY.length; i++) {
+		for ( i = 0; i < TABS_ARRAY.length; i+=1) {
 			document.getElementById(TABS_ARRAY[i]).style.display = 'none';
 		}
 	}, FILTER_W_YEAR = "", FILTER_W_MONTH = "",
@@ -175,7 +175,7 @@ var batteryMonitor = function() {
 	dbDisplayAll = function(tx, rs) {
 		console.log("+dbDisplayAll - called with " + rs.rows.length + " rows");
 		var i = null, output = null;
-		for ( i = 0; i < rs.rows.length; i++) {
+		for ( i = 0; i < rs.rows.length; i+=1) {
 			output = renderRow(rs.rows.item(i));
 			console.log(output);
 		}
@@ -192,7 +192,7 @@ var batteryMonitor = function() {
 		opt.setAttribute("selected", "true");
 		opt.innerHTML = "ALL";
 		select.appendChild(opt);
-		for ( i = 0; i < rs.rows.length; i++) {
+		for ( i = 0; i < rs.rows.length; i+=1) {
 			opt = document.createElement("option");
 			opt.setAttribute('value', rs.rows.item(i).result);
 			opt.innerHTML = rs.rows.item(i).result;
@@ -383,13 +383,25 @@ var batteryMonitor = function() {
 	onBatteryStatusChg = function(info) {
 		console.log("+onBatteryStatusChg called");
 		try {
-			var date = new Date(), curTime = date.getTime(), curTime = curTime / MSINS,
-			//put into seconds
+			var date = new Date(), curTime = date.getTime(), //holds current time
+			drainRate = 0, //holds drain rate
+			chargeRate = 0, //holds charge rate
+			isPlugged = 0, //is device plugged in?
+			year = date.getFullYear(), // year
+			month = date.getMonth() + 1, // need to add 1 as month = [0,11]
+			day = date.getDate(), //day
+			hour = date.getHours(), //hour
+			min = date.getMinutes(), //min
+			sec = date.getSeconds(), //sec
+			//default INSERT INTO statement
+			statement = "INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+			// log msg
 			msg = "Plugged in:" + info.isPlugged + "<br>Battery Level:" + info.level + "%", logMsg = getTimeStamp(date),
-
 			/* stat related vars */
 			chgInterval = 0, isLevelChg = 0;
 
+			//put into seconds
+			curTime = curTime / MSINS;
 			if (CUR_STATE === null) {
 				// first battery status change
 				CUR_STATE = info.isPlugged;
@@ -431,14 +443,14 @@ var batteryMonitor = function() {
 						// Track charge (assuming changing by 1% every time
 
 						CHARGE_TIME += chgInterval;
-						CHARGE_TOTAL++;
+						CHARGE_TOTAL+=1;
 						logMsg = logMsg + "charge Total:" + CHARGE_TOTAL + "\ncharge Time:" + CHARGE_TIME;
 						console.log(logMsg);
 
 					} else {
 						// Track drain
 						DRAIN_TIME += chgInterval;
-						DRAIN_TOTAL++;
+						DRAIN_TOTAL +=1;
 						logMsg = logMsg + "drain Total:" + DRAIN_TOTAL + "\ndrain Time:" + DRAIN_TIME;
 						console.log(logMsg);
 					}
@@ -446,7 +458,7 @@ var batteryMonitor = function() {
 			}
 			//console.log(info.isPlugged);
 			//console.log(info.level);
-			var drainRate = DRAIN_TOTAL / DRAIN_TIME,
+			drainRate = DRAIN_TOTAL / DRAIN_TIME;
 			// % per second
 			chargeRate = CHARGE_TOTAL / CHARGE_TIME;
 			// % per second
@@ -470,7 +482,6 @@ var batteryMonitor = function() {
 
 			INTERVAL = curTime;
 
-			var isPlugged = 0, year = date.getFullYear(), month = date.getMonth() + 1, day = date.getDate(), hour = date.getHours(), min = date.getMinutes(), sec = date.getSeconds(), statement = "INSERT INTO " + TB_NAME + "(pin, os, session, level, ischarging, islevelchg, levelchgtime, year, month, day, hour, minute, second) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			if (info.isPlugged) {
 				isPlugged = 1;
 			}
@@ -485,9 +496,6 @@ var batteryMonitor = function() {
 
 	// Battery tracking functions //
 	//batteryMonitor_init
-	//params
-	// 	curStateElement:	DOM Element used to track current Battery State to the User
-	// 	logElement:			DOM Element used to log updates
 	batteryMonitor_init = function() {
 		console.log("batteryMonitor_init");
 		var date = new Date();
@@ -511,7 +519,7 @@ var batteryMonitor = function() {
 		init : function(uiElements) {
 			// initialize ui /dom elements
 			// use empty array for test suite
-			if (uiElements !== {}) {
+			if (uiElements.isTesting === false) {
 				ISTESTING = false;
 				CURRENT_STATE_ELEMENT = uiElements.curState;
 				LOGGING_ELEMENT = uiElements.logger;
@@ -550,10 +558,10 @@ var batteryMonitor = function() {
 		},
 		filterByYear : function(year) {
 			console.log("++ selected Year " + year);
-			var filterByYear = DEFAULTFILTER;
+			var filterByYear = DEFAULTFILTER, statement='';
 			if (year !== "ALL") {
 				filterByYear = filterByYear + " AND year=" + year;
-				var statement = "SELECT DISTINCT month AS result FROM " + TB_NAME + " " + filterByYear;
+				statement = "SELECT DISTINCT month AS result FROM " + TB_NAME + " " + filterByYear;
 				db_query(statement, [], updateMonthFilter, db_onError);
 			} else {
 				/* hide month and day filter */
@@ -566,10 +574,10 @@ var batteryMonitor = function() {
 
 		filterByMonth : function(month) {
 			console.log("++ selected Month " + month);
-			var filter = FILTER_W_YEAR;
+			var filter = FILTER_W_YEAR, statement='';
 			if (month !== "ALL") {
 				filter = filter + " AND month=" + month;
-				var statement = "SELECT DISTINCT day AS result FROM " + TB_NAME + " " + filter;
+				statement = "SELECT DISTINCT day AS result FROM " + TB_NAME + " " + filter;
 				db_query(statement, [], updateDayFilter, db_onError);
 			} else {
 				/* hide day filter */
@@ -602,10 +610,12 @@ var batteryMonitor = function() {
 			db_query(statement, items, onSuccess, onError);
 		},
 		doInsertDemoData : function() {
-			alert("Do you want to overwrite all currently stored data with demo data?");
-			db_insertDemoData();
-			updateHistStats(DEFAULTFILTER);
-			db_query("SELECT DISTINCT year AS result FROM " + TB_NAME + " " + DEFAULTFILTER, [], updateYearFilter, db_onError);
+			var reply = confirm("Do you want to overwrite all currently stored data with demo data?");
+			if (reply) {
+				db_insertDemoData();
+				updateHistStats(DEFAULTFILTER);
+				db_query("SELECT DISTINCT year AS result FROM " + TB_NAME + " " + DEFAULTFILTER, [], updateYearFilter, db_onError);
+			}
 		}
 	};
 };
