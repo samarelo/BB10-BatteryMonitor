@@ -132,7 +132,7 @@ var batteryMonitor = function() {
 	// DOM Manipulation functions
 	hideAllTabs = function() {
 		var i;
-		for ( i = 0; i < TABS_ARRAY.length; i+=1) {
+		for ( i = 0; i < TABS_ARRAY.length; i += 1) {
 			document.getElementById(TABS_ARRAY[i]).style.display = 'none';
 		}
 	}, FILTER_W_YEAR = "", FILTER_W_MONTH = "",
@@ -175,7 +175,7 @@ var batteryMonitor = function() {
 	dbDisplayAll = function(tx, rs) {
 		console.log("+dbDisplayAll - called with " + rs.rows.length + " rows");
 		var i = null, output = null;
-		for ( i = 0; i < rs.rows.length; i+=1) {
+		for ( i = 0; i < rs.rows.length; i += 1) {
 			output = renderRow(rs.rows.item(i));
 			console.log(output);
 		}
@@ -192,7 +192,7 @@ var batteryMonitor = function() {
 		opt.setAttribute("selected", "true");
 		opt.innerHTML = "ALL";
 		select.appendChild(opt);
-		for ( i = 0; i < rs.rows.length; i+=1) {
+		for ( i = 0; i < rs.rows.length; i += 1) {
 			opt = document.createElement("option");
 			opt.setAttribute('value', rs.rows.item(i).result);
 			opt.innerHTML = rs.rows.item(i).result;
@@ -289,7 +289,7 @@ var batteryMonitor = function() {
 	},
 	/* used to determine max session from historical data */
 	maxsession = function(tx, rs) {
-		var result=0;
+		var result = 0;
 		if (rs.rows.length === 0) {
 			result = 0;
 		} else {
@@ -445,14 +445,14 @@ var batteryMonitor = function() {
 						// Track charge (assuming changing by 1% every time
 
 						CHARGE_TIME += chgInterval;
-						CHARGE_TOTAL+=1;
+						CHARGE_TOTAL += 1;
 						logMsg = logMsg + "charge Total:" + CHARGE_TOTAL + "\ncharge Time:" + CHARGE_TIME;
 						console.log(logMsg);
 
 					} else {
 						// Track drain
 						DRAIN_TIME += chgInterval;
-						DRAIN_TOTAL +=1;
+						DRAIN_TOTAL += 1;
 						logMsg = logMsg + "drain Total:" + DRAIN_TOTAL + "\ndrain Time:" + DRAIN_TIME;
 						console.log(logMsg);
 					}
@@ -518,7 +518,7 @@ var batteryMonitor = function() {
 	// objects available to outside world
 	return {
 		// method to initialize batteryMonitor
-		init : function(uiElements,callback) {
+		init : function(uiElements, callback) {
 			// initialize ui /dom elements
 			// use empty array for test suite
 			if (uiElements.isTesting === false) {
@@ -542,7 +542,7 @@ var batteryMonitor = function() {
 			console.log("Testing mode set to: " + ISTESTING);
 			db_init();
 			callback();
-			
+
 		},
 		// method used to start monitoring battery
 		start_monitor : function() {
@@ -562,7 +562,7 @@ var batteryMonitor = function() {
 		},
 		filterByYear : function(year) {
 			console.log("++ selected Year " + year);
-			var filterByYear = DEFAULTFILTER, statement='';
+			var filterByYear = DEFAULTFILTER, statement = '';
 			if (year !== "ALL") {
 				filterByYear = filterByYear + " AND year=" + year;
 				statement = "SELECT DISTINCT month AS result FROM " + TB_NAME + " " + filterByYear;
@@ -570,15 +570,17 @@ var batteryMonitor = function() {
 			} else {
 				/* hide month and day filter */
 				document.getElementById(FILTER_MONTH_ELEMENT).style.display = "none";
-				document.getElementById(FILTER_DAY_ELEMENT).style.display = "none";
 			}
+			// hide Day selection whenever year value is changed
+			document.getElementById(FILTER_DAY_ELEMENT).style.display = "none";
+
 			FILTER_W_YEAR = filterByYear;
 			updateHistStats(filterByYear);
 		},
 
 		filterByMonth : function(month) {
 			console.log("++ selected Month " + month);
-			var filter = FILTER_W_YEAR, statement='';
+			var filter = FILTER_W_YEAR, statement = '';
 			if (month !== "ALL") {
 				filter = filter + " AND month=" + month;
 				statement = "SELECT DISTINCT day AS result FROM " + TB_NAME + " " + filter;
