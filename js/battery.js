@@ -9,10 +9,10 @@
 // });
 
 var batteryMonitor = function() {
-	//'use strict';
+    //'use strict';
 	// UNIVERSAL variables //
 	// used to determine if module is being call for test suites
-	var ISTESTING = true,
+    var ISTESTING = true,
 	// DOM/UI related variables //
 	// used to store Element for displaying current state
 	CURRENT_STATE_ELEMENT = null,
@@ -467,15 +467,16 @@ var batteryMonitor = function() {
 			// 60 seconds a minute|60 minutes a hour == 3600
 			if (isNumber(drainRate)) {
 				drainRate = (drainRate * SINH).toFixed(2);
+                msg = msg + "<br>Avg Drain Rate:" + drainRate + "%/hour";
 			} else {
-				drainRate = '--';
+				msg = msg + "<br>Avg Drain Rate:";
 			}
 			if (isNumber(chargeRate)) {
 				chargeRate = (chargeRate * SINH).toFixed(2);
+                msg = msg + "<br>Avg Charge Rate:" + chargeRate + "%/hour";
 			} else {
-				chargeRate = '--';
+                msg = msg + "<br>Avg Charge Rate:";
 			}
-			msg = msg + "<br>Avg Drain Rate:" + drainRate + "%/hour<br>Avg Charge Rate:" + chargeRate + "%/hour";
 			console.log(msg);
 			document.getElementById(CURRENT_STATE_ELEMENT).innerHTML = msg;
 
