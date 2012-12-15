@@ -560,6 +560,17 @@ var batteryMonitor = function() {
 			console.log("++BatteryMonitor--stopListening for batterystatus");
 			document.getElementById(STOP_BTN_ELEMENT).style.display = "none";
 			document.getElementById(START_BTN_ELEMENT).style.display = "inline-block";
+            // need to reset tracking variables
+            CUR_LVL = 0;
+            CUR_STATE = null;
+            LVL_TIME = null;
+            STATE_TIME = null;
+            START_TIME = null;
+            INTERVAL = null;
+            CHARGE_TIME = 0;
+            DRAIN_TIME = 0;
+            CHARGE_TOTAL = 0;
+            DRAIN_TOTAL = 0;
 		},
 		filterByYear : function(year) {
 			console.log("++ selected Year " + year);
