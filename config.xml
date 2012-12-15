@@ -5,8 +5,7 @@
 	version="0.0.0.3">
   
 	<name>Battery Monitor</name>
- 	<author href="http://shaunsapps.com/" 
-		rim:copyright="Copyright 2012 Shaun Amarelo">Shaun Amarelo</author>
+ 	<author href="http://shaunsapps.com/">Shaun Amarelo</author>
   	<description>
 		An application to monitor the battery charging and draining rate of BB10 devices. 
 	</description>
