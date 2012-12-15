@@ -2,7 +2,7 @@
 <widget xmlns="http://www.w3.org/ns/widgets"
 	xmlns:rim="http://www.blackberry.com/ns/widgets" 
 	id="com.shaunamarelo.BB10BatteryMonitor" 
-	version="0.0.0.3">
+	version="1.0.0">
   
 	<name>Battery Monitor</name>
  	<author href="http://shaunsapps.com/">Shaun Amarelo</author>
