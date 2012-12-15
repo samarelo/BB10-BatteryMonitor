@@ -556,6 +556,9 @@ var batteryMonitor = function() {
 		},
 		// method used to stop monitoring battery
 		stop_monitor : function() {
+            // reset current session GUI
+            var msg = "Plugged in:<br>Battery Level:<br>Avg Drain Rate:<br>Avg Charge Rate:";
+            document.getElementById(CURRENT_STATE_ELEMENT).innerHTML = msg;
 			blackberry.event.removeEventListener("batterystatus", onBatteryStatusChg);
 			console.log("++BatteryMonitor--stopListening for batterystatus");
 			document.getElementById(STOP_BTN_ELEMENT).style.display = "none";
