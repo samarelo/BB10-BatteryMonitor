@@ -16,4 +16,5 @@
 	</rim:permissions>
   	<content src="index.html"/>
 	<feature id="blackberry.system"/>
+    <feature id="blackberry.identity/>
 </widget>
