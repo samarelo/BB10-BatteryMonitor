@@ -1,0 +1,6 @@
+
+1. Issue # 12 - Add support for PlayBook and Legacy OS
+	- different API usage
+2. Issue # 10 - Remove blocking alert code
+
+3. Issue # 9 - indicate source code available online
