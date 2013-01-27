@@ -12,9 +12,9 @@
 	<icon src="icon.png"/>
 	<rim:permissions>
         <rim:permit>read_device_identifying_information</rim:permit>
-		<rim:permit>run_when_backgrounded</rim:permit>
+	<rim:permit>run_when_backgrounded</rim:permit>
 	</rim:permissions>
   	<content src="index.html"/>
 	<feature id="blackberry.system"/>
-    <feature id="blackberry.identity/>
+        <feature id="blackberry.identity"/>
 </widget>
