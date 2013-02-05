@@ -118,8 +118,14 @@ var batteryMonitor = function () {
                 timestamp += date.getMilliseconds();
                 return timestamp;
             } catch (err) {
-                alert("error getting TimeStamp -" + err);
-            }
+                var message = "Error getting TimeStamp -" +err;
+		try {
+			blackberry.ui.dialog.standardAskAsync(message, blackberry.ui.dialog.D_OK, function () {
+				//do nothing});
+		} catch (err){
+			alert("error " + err);
+            	}	
+	     }
         },
 
 	// confirms value is a number
@@ -473,7 +479,13 @@ var batteryMonitor = function () {
                 }
                 db_query(statement, [DEVICEPIN, DEVICEOS, TRACKSESSION, info.level, isPlugged, isLevelChg, chgInterval, year, month, day, hour, min, sec], db_onSuccess, db_onError);
             } catch (err) {
-                alert("onBatteryChg::" + err);
+                var message = "Error onBatteryChg -" +err);
+		try {
+			blackberry.ui.dialog.standardAskAsync(message, blackberry.ui.dialog.D_OK, function () {
+				//do nothing});
+		} catch (err){
+			alert("error " + err);
+            	}	
             }
         },
 
@@ -493,7 +505,13 @@ var batteryMonitor = function () {
                     document.getElementById(LOGGING_ELEMENT).innerHTML += getTimeStamp(date) + " starting tracking<br>";
                 }
             } catch (err) {
-                alert("failed to start event listener: " + err);
+                var message = "failed to start event listener:"  +err);
+		try {
+			blackberry.ui.dialog.standardAskAsync(message, blackberry.ui.dialog.D_OK, function () {
+				//do nothing});
+		} catch (err){
+			alert("error " + err);
+            	}	
             }
         };
 	// objects available to outside world
@@ -607,12 +625,20 @@ var batteryMonitor = function () {
 			db_query(statement, items, onSuccess, onError);
 		},
 		doInsertDemoData : function () {
-			var reply = confirm("Do you want to overwrite all currently stored data with demo data?");
-			if (reply) {
-				db_insertDemoData();
-				updateHistStats(DEFAULTFILTER);
-				db_query("SELECT DISTINCT year AS result FROM " + TB_NAME + " " + DEFAULTFILTER, [], updateYearFilter, db_onError);
-			}
+			var message = "Do you want to overwrite all currently stored data with demo data?";;
+		try {
+			blackberry.ui.dialog.standardAskAsync(message, blackberry.ui.dialog.D_YES_NO, function (index) {
+				console.log(index);
+				if (index == 0) {
+					db_insertDemoData();
+					updateHistStats(DEFAULTFILTER);
+					db_query("SELECT DISTINCT year AS result FROM " + TB_NAME + " " + DEFAULTFILTER, [], updateYearFilter, db_onError);
+				}	
+			});
+		} catch (err){
+			alert("error " + err);
+            	}
+			
 		}
 	};
 };
