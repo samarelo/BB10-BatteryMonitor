@@ -1,4 +1,4 @@
-// batteryMonitor
+// batteryMonitor var batteryMonitor = function () {
 var batteryMonitor = function () {
     'use strict';
 	// UNIVERSAL variables //
@@ -95,7 +95,7 @@ var batteryMonitor = function () {
                     timestamp += 0;
                 }
                 timestamp += date.getMonth() + 1 + "-";
-			//need +1 as Months =[0,11]
+				//need +1 as Months =[0,11]
                 if (date.getDate() < 10) {
                     timestamp += 0;
                 }
@@ -118,8 +118,11 @@ var batteryMonitor = function () {
                 timestamp += date.getMilliseconds();
                 return timestamp;
             } catch (err) {
-                alert("error getting TimeStamp -" + err);
-            }
+                var message = "Error getting TimeStamp -" +err;
+				blackberry.ui.dialog.standardAskAsync(message, blackberry.ui.dialog.D_OK, function () {
+						//do nothing
+					});
+			}    
         },
 
 	// confirms value is a number
@@ -473,7 +476,10 @@ var batteryMonitor = function () {
                 }
                 db_query(statement, [DEVICEPIN, DEVICEOS, TRACKSESSION, info.level, isPlugged, isLevelChg, chgInterval, year, month, day, hour, min, sec], db_onSuccess, db_onError);
             } catch (err) {
-                alert("onBatteryChg::" + err);
+                var message = "Error onBatteryChg -" +err;
+		blackberry.ui.dialog.standardAskAsync(message, blackberry.ui.dialog.D_OK, function () {
+			//do nothing
+		});
             }
         },
 
@@ -493,17 +499,20 @@ var batteryMonitor = function () {
                     document.getElementById(LOGGING_ELEMENT).innerHTML += getTimeStamp(date) + " starting tracking<br>";
                 }
             } catch (err) {
-                alert("failed to start event listener: " + err);
+                var message = "failed to start event listener:"  +err;
+		blackberry.ui.dialog.standardAskAsync(message, blackberry.ui.dialog.D_OK, function () {
+			//do nothing
+		});
             }
         };
 	// objects available to outside world
-    return {
+ 	return {
 		// method to initialize batteryMonitor
-        init : function (uiElements, callback) {
+		init : function (uiElements, callback) {
 			// initialize ui /dom elements
 			// use empty array for test suite
-            if (uiElements.isTesting === false) {
-                ISTESTING = false;
+            		if (uiElements.isTesting === false) {
+                		ISTESTING = false;
 				CURRENT_STATE_ELEMENT = uiElements.curState;
 				LOGGING_ELEMENT = uiElements.logger;
 				START_BTN_ELEMENT = uiElements.startButton;
@@ -519,7 +528,7 @@ var batteryMonitor = function () {
 				AVG_DRAIN_ELEMENT = uiElements.avgDrain;
 				AVG_CHARGE_ELEMENT = uiElements.avgCharge;
 				SESSION_NUM_ELEMENT = uiElements.sessionNum;
-			}
+			}		
 			console.log("Testing mode set to: " + ISTESTING);
 			db_init();
 			callback();
@@ -535,24 +544,24 @@ var batteryMonitor = function () {
 		},
 		// method used to stop monitoring battery
 		stop_monitor : function () {
-            // reset current session GUI
-            var msg = "Plugged in:<br>Battery Level:<br>Avg Drain Rate:<br>Avg Charge Rate:";
-            document.getElementById(CURRENT_STATE_ELEMENT).innerHTML = msg;
+            		// reset current session GUI
+            		var msg = "Plugged in:<br>Battery Level:<br>Avg Drain Rate:<br>Avg Charge Rate:";
+            		document.getElementById(CURRENT_STATE_ELEMENT).innerHTML = msg;
 			blackberry.event.removeEventListener("batterystatus", onBatteryStatusChg);
 			console.log("++BatteryMonitor--stopListening for batterystatus");
 			document.getElementById(STOP_BTN_ELEMENT).style.display = "none";
 			document.getElementById(START_BTN_ELEMENT).style.display = "inline-block";
-            // need to reset tracking variables
-            CUR_LVL = 0;
-            CUR_STATE = null;
-            LVL_TIME = null;
-            STATE_TIME = null;
-            START_TIME = null;
-            INTERVAL = null;
-            CHARGE_TIME = 0;
-            DRAIN_TIME = 0;
-            CHARGE_TOTAL = 0;
-            DRAIN_TOTAL = 0;
+        		 // need to reset tracking variables
+           		CUR_LVL = 0;
+           		CUR_STATE = null;
+            		LVL_TIME = null;
+            		STATE_TIME = null;
+            		START_TIME = null;
+            		INTERVAL = null;
+            		CHARGE_TIME = 0;
+            		DRAIN_TIME = 0;
+            		CHARGE_TOTAL = 0;
+            		DRAIN_TOTAL = 0;
 		},
 		filterByYear : function (year) {
 			console.log("++ selected Year " + year);
@@ -607,12 +616,19 @@ var batteryMonitor = function () {
 			db_query(statement, items, onSuccess, onError);
 		},
 		doInsertDemoData : function () {
-			var reply = confirm("Do you want to overwrite all currently stored data with demo data?");
-			if (reply) {
-				db_insertDemoData();
-				updateHistStats(DEFAULTFILTER);
-				db_query("SELECT DISTINCT year AS result FROM " + TB_NAME + " " + DEFAULTFILTER, [], updateYearFilter, db_onError);
-			}
+			var message = "Do you want to overwrite all currently stored data with demo data?";;
+			try {
+				blackberry.ui.dialog.standardAskAsync(message, blackberry.ui.dialog.D_YES_NO, function (index) {
+					console.log(index);
+					if (index == 0) {
+						db_insertDemoData();
+						updateHistStats(DEFAULTFILTER);
+						db_query("SELECT DISTINCT year AS result FROM " + TB_NAME + " " + DEFAULTFILTER, [], updateYearFilter, db_onError);
+					}	
+				});
+			} catch (err){
+				alert("error " + err);
+            		}
 		}
 	};
 };
